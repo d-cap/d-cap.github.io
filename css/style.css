@@ -1,0 +1,50 @@
+body {
+  padding-top: 20px;
+}
+.navbar-default{
+  background-color: #39D084;
+  border-color: #35C680;
+}
+.navbar-header {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.navbar-nav {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.navbar-default .navbar-brand{
+  color: black;
+}
+.navbar-default .navbar-nav>li>a {
+  color: black;
+}
+.jumbotron {
+  color: #eee;
+  background-color: #203748;
+}
+.btn-capsule {
+  font-size: 250%;
+  border-radius: 400px;
+  border-bottom: 4px solid rgba(0, 0, 0, 0.1);
+}
+
+.btn-hire {
+  background-color: #35C680;
+  color: #eee;
+}
+.logo{
+  height: 32px;
+  display: inline;
+  border-color: darkslategrey;
+  border-width: 1px;
+  border-style: solid;
+}
+@media(min-width: 0px) and (max-width: 768px) {
+    .navbar-header {
+    margin-bottom: 16px;
+  }
+}
+.caption h3 {
+  margin: 5px;
+}
