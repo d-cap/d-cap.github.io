@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.1 (0767f8302a, 2020-10-17)"
+   sodipodi:docname="symmetric_matrix.svg"
+   inkscape:export-filename="/home/davide/projects/blog/programming_blog/assets/images/symmetric_matrix.png"
+   inkscape:export-xdpi="1896.11"
+   inkscape:export-ydpi="1896.11">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="22.4"
+     inkscape:cx="96.437482"
+     inkscape:cy="172.56114"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="true"
+     inkscape:window-width="1912"
+     inkscape:window-height="1017"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid833" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:0.352778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="20.657673"
+       y="41.801949"
+       id="text855"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853"
+         x="20.657673"
+         y="41.801949"
+         style="font-size:0.352778px;stroke-width:0.264583;fill:#cccccc;">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="20.643965"
+       y="43.131611"
+       id="text855-3"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-6"
+         x="20.643965"
+         y="43.131611"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="20.657673"
+       y="44.447784"
+       id="text855-7"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-5"
+         x="20.657673"
+         y="44.447784"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="21.716005"
+       y="40.743618"
+       id="text855-2"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-7"
+         x="21.716005"
+         y="40.743618"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="23.038923"
+       y="40.743618"
+       id="text855-0"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-9"
+         x="23.038923"
+         y="40.743618"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="24.361839"
+       y="40.743618"
+       id="text855-36"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-0"
+         x="24.361839"
+         y="40.743618"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">2</tspan></text>
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1083"
+       width="1.3229166"
+       height="1.3229166"
+       x="19.84375"
+       y="46.302082"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1083-6"
+       width="1.3229166"
+       height="1.3229166"
+       x="21.166666"
+       y="46.302082"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1083-69"
+       width="1.3229166"
+       height="1.3229166"
+       x="22.489584"
+       y="46.302082"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1083-3"
+       width="1.3229166"
+       height="1.3229166"
+       x="23.8125"
+       y="46.302082"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1083-7"
+       width="1.3229166"
+       height="1.3229166"
+       x="25.135416"
+       y="46.302082"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1083-4"
+       width="1.3229166"
+       height="1.3229166"
+       x="26.458334"
+       y="46.302082"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="20.393089"
+       y="46.035278"
+       id="text855-97"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-76"
+         x="20.393089"
+         y="46.035278"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="21.716005"
+       y="46.035278"
+       id="text855-73"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-65"
+         x="21.716005"
+         y="46.035278"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="23.038923"
+       y="46.035278"
+       id="text855-63"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-94"
+         x="23.038923"
+         y="46.035278"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="24.361839"
+       y="46.035278"
+       id="text855-8"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-12"
+         x="24.361839"
+         y="46.035278"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">3</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="25.684755"
+       y="46.035278"
+       id="text855-93"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-90"
+         x="25.684755"
+         y="46.035278"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">4</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.352777px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583;fill:#cccccc;"
+       x="27.007673"
+       y="46.035278"
+       id="text855-88"
+       inkscape:transform-center-x="0.010376199"
+       inkscape:transform-center-y="0.012906221"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan853-50"
+         x="27.007673"
+         y="46.035278"
+         style="font-size:0.352777px;stroke-width:0.264583;fill:#cccccc;">5</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="20.16172"
+       y="47.347084"
+       id="text959-4"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-30"
+         x="20.16172"
+         y="47.347084"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="21.484186"
+       y="47.351635"
+       id="text959-7-30"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-9-9"
+         x="21.484186"
+         y="47.351635"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="22.843079"
+       y="47.34708"
+       id="text959-2-2"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-0-5"
+         x="22.843079"
+         y="47.34708"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">3</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="24.165995"
+       y="47.347084"
+       id="text959-23-4"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-7-0"
+         x="24.165995"
+         y="47.347084"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">4</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="25.488911"
+       y="47.347084"
+       id="text959-5-5"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-92-9"
+         x="25.488911"
+         y="47.347084"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">5</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="26.811829"
+       y="47.347084"
+       id="text959-28-2"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-97-4"
+         x="26.811829"
+         y="47.347084"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">6</tspan></text>
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:normal"
+       id="rect1880"
+       width="1.3229166"
+       height="1.3229166"
+       x="21.166666"
+       y="41.010418"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1880-5"
+       width="1.3229166"
+       height="1.3229166"
+       x="22.489582"
+       y="41.010418"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1880-1"
+       width="1.3229166"
+       height="1.3229166"
+       x="23.8125"
+       y="41.010418"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1880-10"
+       width="1.3229166"
+       height="1.3229166"
+       x="23.8125"
+       y="42.333336"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1880-50"
+       width="1.3229166"
+       height="1.3229166"
+       x="21.166666"
+       y="42.333336"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1880-6"
+       width="1.3229166"
+       height="1.3229166"
+       x="22.489582"
+       y="42.333336"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1880-4"
+       width="1.3229166"
+       height="1.3229166"
+       x="22.489582"
+       y="43.65625"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1880-62"
+       width="1.3229166"
+       height="1.3229166"
+       x="21.166666"
+       y="43.65625"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:0.03;stroke-linecap:square;stroke-miterlimit:3.5;stroke-dasharray:none;stroke-dashoffset:0.340157;paint-order:stroke markers fill"
+       id="rect1880-58"
+       width="1.3229166"
+       height="1.3229166"
+       x="23.8125"
+       y="43.65625"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="22.861835"
+       y="43.378155"
+       id="text959-2"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-0"
+         x="22.861835"
+         y="43.378155"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">3</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="24.171154"
+       y="43.338753"
+       id="text959-7-59"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-9-7"
+         x="24.171154"
+         y="43.338753"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">5</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="22.873985"
+       y="42.012604"
+       id="text959-7-57"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-9-4"
+         x="22.873985"
+         y="42.012604"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="21.471653"
+       y="42.059982"
+       id="text959"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957"
+         x="21.471653"
+         y="42.059982"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="24.144365"
+       y="42.037243"
+       id="text959-7-1"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-9-8"
+         x="24.144365"
+         y="42.037243"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">4</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="21.520082"
+       y="43.338009"
+       id="text959-7"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-9"
+         x="21.520082"
+         y="43.338009"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="21.509272"
+       y="44.703957"
+       id="text959-23"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-7"
+         x="21.509272"
+         y="44.703957"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">4</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="22.819942"
+       y="44.707691"
+       id="text959-5"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-92"
+         x="22.819942"
+         y="44.707691"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">5</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;line-height:1.25;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';letter-spacing:0px;word-spacing:0px;fill:#0066ff;stroke-width:0.264583;"
+       x="24.145103"
+       y="44.709721"
+       id="text959-28"
+       inkscape:export-xdpi="1896.11"
+       inkscape:export-ydpi="1896.11"><tspan
+         sodipodi:role="line"
+         id="tspan957-97"
+         x="24.145103"
+         y="44.709721"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.05833px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code';fill:#0066ff;stroke-width:0.264583;">6</tspan></text>
+  </g>
+</svg>
