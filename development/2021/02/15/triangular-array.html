@@ -170,10 +170,10 @@
     <span class="n">dimension</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Analysing the structure we can see that is composed of two fields, <code class="language-plaintext highlighter-rouge">array</code> that should contain the unique data only (essentially we store only the upper or lower triangular matrix) and <code class="language-plaintext highlighter-rouge">dimension</code> that reflect the size of the symmetrical matrix.<br />
+<p>Analysing the structure we can see that is composed of two fields, <code class="language-plaintext highlighter-rouge">array</code> that should contain the unique data only (essentially we store only the upper or lower triangular matrix) and <code class="language-plaintext highlighter-rouge">dimension</code> that reflects the size of the symmetrical matrix.<br />
 The data is stored in a <code class="language-plaintext highlighter-rouge">(n × n + 1) ÷ 2</code> array, and this will save <code class="language-plaintext highlighter-rouge">(n × n) - ((n × n + 1) ÷ 2)</code> elements in memory.</p>
 
-<p>To construct the structure with can use the following associate function:</p>
+<p>To construct the structure we can use the following associate function:</p>
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">with_dimension</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">std</span><span class="p">::</span><span class="nn">result</span><span class="p">::</span><span class="n">Result</span><span class="o">&lt;</span><span class="n">TriangularArray</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nb">String</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
@@ -191,7 +191,7 @@ The data is stored in a <code class="language-plaintext highlighter-rouge">(n ×
 <span class="p">}</span></code></pre></figure>
 
 <p>First why do we need to return a Result? This is because the matrix needs to be at least of size 1. Next we calculate the size needed to store a matrix <code class="language-plaintext highlighter-rouge">n × n</code> and create a Vec of the calculated size with a default value for all the elements.
-To get and set the value for a specific element we can use the followings:</p>
+To get and set the value for a specific element we can use the following:</p>
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_value</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">rows_index</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">columns_index</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;&amp;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="k">self</span><span class="py">.array</span>
@@ -245,12 +245,12 @@ Let’s discuss first how an index is calculated</p>
 
 <p>Note the followings on the <code class="language-plaintext highlighter-rouge">calculate_index</code> method:</p>
 <ol>
-  <li>It checks first (only in debug but that should be enough) if the row and column indices are valied;</li>
-  <li>it calculate the correct index based on the case;</li>
+  <li>It checks first (only in debug but that should be enough) if the row and column indices are valid;</li>
+  <li>it calculates the correct index based on the case;</li>
   <li>the special check against 0 is to not have an overflow using the usize.</li>
 </ol>
 
-<p>This is how you can store a symmetric matrix in a more compact way using some indices math to keep the same “behaviour.</p>
+<p>This is how you can store a symmetric matrix in a more compact way using some indices math to keep the same behaviour.</p>
 
 <p>See you next time!</p>
 
@@ -271,6 +271,16 @@ Let’s discuss first how an index is calculated</p>
       
 
       
+  <nav class="pagination">
+    
+      <a href="#" class="pagination--pager disabled">Previous</a>
+    
+    
+      <a href="/development/2021/02/23/markov-chain.html" class="pagination--pager" title="Let’s code it: Sentence/word generations
+">Next</a>
+    
+  </nav>
+
     </div>
 
     

@@ -1,0 +1,473 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Let’s code it: Sentence/word generations - Let’s code it!</title>
+<meta name="description" content="Are you planning to create a name generator or a sentence generator? Generate strings using Markov chains could be the easy solution.">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Let's code it!">
+<meta property="og:title" content="Let’s code it: Sentence/word generations">
+<meta property="og:url" content="http://d-cap.github.io/development/2021/02/23/markov-chain.html">
+
+
+  <meta property="og:description" content="Are you planning to create a name generator or a sentence generator? Generate strings using Markov chains could be the easy solution.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-02-23T07:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://d-cap.github.io/development/2021/02/23/markov-chain.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://d-cap.github.io/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Let's code it! Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <script data-ad-client="ca-pub-5955143626599578" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Let's code it!
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Let’s code it: Sentence/word generations">
+    <meta itemprop="description" content="Are you planning to create a name generator or a sentence generator? Generate strings using Markov chains could be the easy solution.">
+    <meta itemprop="datePublished" content="2021-02-23T07:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Let’s code it: Sentence/word generations
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Are you planning to create a name generator or a sentence generator? Generate strings using Markov chains could be the easy solution.</p>
+
+<p>Let’s say that we have the following sentences:</p>
+<ul>
+  <li>I really like coding</li>
+  <li>I really love chatting</li>
+</ul>
+
+<p>Below you can see the chain create splitting the sentence using 3 characters and adding weights for the number of repeated links (the underscore character is used instead of the space character just for clarity).</p>
+
+<p><img src="/assets/images/markov_chain.png" alt="Markov chain" /></p>
+<blockquote>
+  <p>Note: the # character is used to mark the end of the string, this will be clear in the implementation.</p>
+</blockquote>
+
+<p>Now with the chain created we can create new sentences:</p>
+<ul>
+  <li>I really like chatting</li>
+  <li>I really love coding</li>
+</ul>
+
+<h2 id="actual-implementation">Actual implementation</h2>
+<p>The current implementation is slightly different from the diagram above. This is the chain generated from it:</p>
+<blockquote>
+  <p>Note: a list was used instead of the graph because it was confusing, the first elements in the list are the values extracted from the the sentences, the second ones are the links between the first and the next elements.</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chain: {
+    " ch": {
+        "cha": 1.0,
+    },
+    " co": {
+        "cod": 1.0,
+    },
+    " li": {
+        "lik": 1.0,
+    },
+    " lo": {
+        "lov": 1.0,
+    },
+    " re": {
+        "rea": 2.0,
+    },
+    "I r": {
+        " re": 2.0,
+    },
+    "all": {
+        "lly": 2.0,
+    },
+    "att": {
+        "tti": 1.0,
+    },
+    "cha": {
+        "hat": 1.0,
+    },
+    "cod": {
+        "odi": 1.0,
+    },
+    "din": {
+        "ing": 1.0,
+    },
+    "e c": {
+        " ch": 1.0,
+        " co": 1.0,
+    },
+    "eal": {
+        "all": 2.0,
+    },
+    "hat": {
+        "att": 1.0,
+    },
+    "ike": {
+        "ke ": 1.0,
+    },
+    "ing": {
+        "ng#": 2.0,
+    },
+    "ke ": {
+        "e c": 1.0,
+    },
+    "lik": {
+        "ike": 1.0,
+    },
+    "lly": {
+        "ly ": 2.0,
+    },
+    "lov": {
+        "ove": 1.0,
+    },
+    "ly ": {
+        "y l": 2.0,
+    },
+    "odi": {
+        "din": 1.0,
+    },
+    "ove": {
+        "ve ": 1.0,
+    },
+    "rea": {
+        "eal": 2.0,
+    },
+    "tin": {
+        "ing": 1.0,
+    },
+    "tti": {
+        "tin": 1.0,
+    },
+    "ve ": {
+        "e c": 1.0,
+    },
+    "y l": {
+        " li": 1.0,
+        " lo": 1.0,
+    },
+},
+</code></pre></div></div>
+<p>As you can see the substrings are generated chaning two of the previous characters and adding a new one instead of using the next <strong>n</strong> new characters, this will allow a much better end result.</p>
+
+<h2 id="the-code">The code</h2>
+<p>This is the base struct to collect the data for the Markov chain</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">TextGenerator</span> <span class="p">{</span>
+    <span class="n">starts</span><span class="p">:</span> <span class="n">BTreeMap</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="nb">f32</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">chain</span><span class="p">:</span> <span class="n">BTreeMap</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="n">BTreeMap</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="nb">f32</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>It’s divided in two fields <code class="language-plaintext highlighter-rouge">starts</code> that contains all the values for the starting input strings and <code class="language-plaintext highlighter-rouge">chain</code> that contains all the chains. <code class="language-plaintext highlighter-rouge">starts</code> is useful so we can start from sensible rather than random values.</p>
+
+<p>Next we need to fill the data structure using the following algorithm:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">sentences</span><span class="p">:</span> <span class="o">&amp;</span><span class="p">[</span><span class="nb">String</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">u32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">starts</span> <span class="o">=</span> <span class="nn">BTreeMap</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">chain</span><span class="p">:</span> <span class="n">BTreeMap</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="n">BTreeMap</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="nb">f32</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="nn">BTreeMap</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+    <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="n">in</span> <span class="n">sentences</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">word_terminated</span> <span class="o">=</span> <span class="n">sentence</span><span class="nf">.to_owned</span><span class="p">();</span>
+        <span class="c">// Append the end mark character to the chain</span>
+        <span class="n">word_terminated</span><span class="nf">.push</span><span class="p">(</span><span class="sc">'#'</span><span class="p">);</span>
+        <span class="k">let</span> <span class="n">chars</span> <span class="o">=</span> <span class="n">word_terminated</span><span class="nf">.chars</span><span class="p">()</span><span class="py">.collect</span><span class="p">::</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="mi">_</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+        <span class="c">// This is needed because we are using group of n characters</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="n">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">chars</span><span class="nf">.len</span><span class="p">()</span> <span class="o">-</span> <span class="n">n</span> <span class="p">{</span>
+            <span class="c">// Extract the current group of n characters</span>
+            <span class="k">let</span> <span class="n">tuple</span><span class="p">:</span> <span class="nb">String</span> <span class="o">=</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span><span class="o">..</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">]</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.collect</span><span class="p">();</span>
+            <span class="c">// If it's the first iteration, the start of the string</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+                <span class="c">// Search inside the starts map if the value is already there</span>
+                <span class="c">// get it, otherwise add default (0.0) and add 1 anyway</span>
+                <span class="o">*</span><span class="n">starts</span><span class="nf">.entry</span><span class="p">(</span><span class="n">tuple</span><span class="nf">.clone</span><span class="p">())</span><span class="nf">.or_default</span><span class="p">()</span> <span class="o">+=</span> <span class="mf">1.0</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c">// Extract the next group of n characters</span>
+            <span class="k">let</span> <span class="n">next</span><span class="p">:</span> <span class="nb">String</span> <span class="o">=</span> <span class="n">chars</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">..=</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">]</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.collect</span><span class="p">();</span>
+            <span class="c">// Search inside the chains map, if present get the tuple value from it,</span>
+            <span class="c">// otherwise add a new empty map, in both cases repeat the same process for</span>
+            <span class="c">// the starts this will link the tuple with the next value</span>
+            <span class="o">*</span><span class="n">chain</span><span class="nf">.entry</span><span class="p">(</span><span class="n">tuple</span><span class="p">)</span><span class="nf">.or_default</span><span class="p">()</span><span class="nf">.entry</span><span class="p">(</span><span class="n">next</span><span class="p">)</span><span class="nf">.or_default</span><span class="p">()</span> <span class="o">+=</span> <span class="mf">1.0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">Self</span> <span class="p">{</span> <span class="n">starts</span><span class="p">,</span> <span class="n">chain</span> <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note: the implementation uses BTreeMap because in my cases the creation of the chain happens at the start of the application. If you need dynamic chains a HashMap it’s probably better because of the sorting nature of the BTreeMap, you need to balance between creations and sentence generation.</p>
+</blockquote>
+
+<p>After all the values are collected we can generate a value with the following method:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">generate</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">random</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">StdRng</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">String</span> <span class="p">{</span>
+    <span class="c">// Select a tuple from the starts to initiate the generation</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">tuple</span> <span class="o">=</span> <span class="nn">TextGenerator</span><span class="p">::</span><span class="nf">select_random_item</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="py">.starts</span><span class="p">,</span> <span class="n">random</span><span class="p">);</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">result</span> <span class="o">=</span> <span class="nn">String</span><span class="p">::</span><span class="nf">with_capacity</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+    <span class="c">// Add the tuple to the result</span>
+    <span class="n">result</span><span class="nf">.push_str</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tuple</span><span class="p">);</span>
+
+    <span class="c">// While there is a valid tuple to extract let's continue</span>
+    <span class="k">while</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">is</span><span class="p">)</span> <span class="o">=</span> <span class="k">self</span><span class="py">.chain</span><span class="nf">.get</span><span class="p">(</span><span class="n">tuple</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/*
+        Select a new tuple from the chain we selected.
+        For example if we have started from the sentences "I li" and "I lo"
+        the chain extracted will be like this
+        "I l": {
+            " li": 1.0,
+            " lo": 1.0,
+        },
+        because the repetition (1.0) is the same we have 50% to select one of them
+        (we use a random value to avoid this)
+        */</span>
+        <span class="n">tuple</span> <span class="o">=</span> <span class="nn">TextGenerator</span><span class="p">::</span><span class="nf">select_random_item</span><span class="p">(</span><span class="n">is</span><span class="p">,</span> <span class="n">random</span><span class="p">);</span>
+        <span class="c">// If the tuple ends with # means that we have reached the end of the generated</span>
+        <span class="c">// sentence and we can break</span>
+        <span class="k">if</span> <span class="n">tuple</span><span class="nf">.ends_with</span><span class="p">(</span><span class="sc">'#'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// Otherwise get the last character and append that into the result.</span>
+            <span class="c">// Other than the start we are building the generated sentence one character at a time</span>
+            <span class="k">let</span> <span class="n">last_character</span> <span class="o">=</span> <span class="n">tuple</span><span class="nf">.chars</span><span class="p">()</span><span class="nf">.next_back</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
+            <span class="n">result</span><span class="nf">.push</span><span class="p">(</span><span class="n">last_character</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">result</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="n">select_random_item</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="n">BTreeMap</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="nb">f32</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">random</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">StdRng</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="nb">String</span> <span class="p">{</span>
+    <span class="c">// This will generate a random number between 0.0 and 1.0 and multiply that with the sum of all the</span>
+    <span class="c">// sub-chain values, allowing us to vary the possibility of getting only the highest ones</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">random_value</span> <span class="o">=</span> <span class="n">random</span><span class="py">.gen</span><span class="p">::</span><span class="o">&lt;</span><span class="nb">f32</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">*</span> <span class="n">items</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.map</span><span class="p">(|(</span><span class="mi">_</span><span class="p">,</span> <span class="n">v</span><span class="p">)|</span> <span class="n">v</span><span class="p">)</span><span class="nf">.count</span><span class="p">()</span> <span class="k">as</span> <span class="nb">f32</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="n">in</span> <span class="n">items</span> <span class="p">{</span>
+        <span class="c">// Decrease the current item from the random value</span>
+        <span class="n">random_value</span> <span class="o">-=</span> <span class="o">*</span><span class="n">v</span> <span class="k">as</span> <span class="nb">f32</span><span class="p">;</span>
+        <span class="c">// To see if the value is the correct one</span>
+        <span class="k">if</span> <span class="n">random_value</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">k</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nd">panic!</span><span class="p">(</span><span class="s">"No item found"</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note: The values generated are not perfect but tweaking the input dataset and checking the results could make it a lot better than the plain version.</p>
+</blockquote>
+
+<p>See you next time!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-02-23T07:00:00+00:00">February 23, 2021</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/development/2021/02/15/triangular-array.html" class="pagination--pager" title="Let’s code it: Compact symmetric matrices
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/d-cap" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="http://linkedin.com/in/davide-capomagi-6a5186a" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="http://omgm.rocks" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-scroll" aria-hidden="true"></i> OMGM</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Let's code it!.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
