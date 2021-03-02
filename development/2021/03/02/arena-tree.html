@@ -1,0 +1,540 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Let’s code it: Compact tree (part 1) - Let’s code it!</title>
+<meta name="description" content="You need a tree structure but you don’t want to pay the cost of single node allocation every time, moreover you want a structure cache friendly as much as possible? An arena based tree could be what you need.">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Let's code it!">
+<meta property="og:title" content="Let’s code it: Compact tree (part 1)">
+<meta property="og:url" content="http://d-cap.github.io/development/2021/03/02/arena-tree.html">
+
+
+  <meta property="og:description" content="You need a tree structure but you don’t want to pay the cost of single node allocation every time, moreover you want a structure cache friendly as much as possible? An arena based tree could be what you need.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-03-02T07:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://d-cap.github.io/development/2021/03/02/arena-tree.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://d-cap.github.io/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Let's code it! Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <script data-ad-client="ca-pub-5955143626599578" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Let's code it!
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Let’s code it: Compact tree (part 1)">
+    <meta itemprop="description" content="You need a tree structure but you don’t want to pay the cost of single node allocation every time, moreover you want a structure cache friendly as much as possible? An arena based tree could be what you need.">
+    <meta itemprop="datePublished" content="2021-03-02T07:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Let’s code it: Compact tree (part 1)
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>You need a tree structure but you don’t want to pay the cost of single node allocation every time, moreover you want a structure cache friendly as much as possible? An arena based tree could be what you need.</p>
+
+<p>An arena based tree is a data structure that uses a packed chunk of memory to store all the nodes of the tree like this:</p>
+
+<p><img src="/assets/images/arena_based_tree.png" alt="Arena based tree" /></p>
+
+<p>Each node contains the index of the the <code class="language-plaintext highlighter-rouge">parent</code>, the <code class="language-plaintext highlighter-rouge">first child</code> and the <code class="language-plaintext highlighter-rouge">next sibling</code>. These information is what we need to navigate the tree effectively without losing the structure. The resulting logic structure can be seen below:</p>
+
+<p><img src="/assets/images/arena_based_tree_logical_structure.png" alt="Arena based tree logical structure" /></p>
+<blockquote>
+  <p>Note <strong>V</strong> is just a generic value</p>
+</blockquote>
+
+<p>Let’s declare the structure for each node:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">TreeNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="p">{</span>
+    <span class="k">pub</span> <span class="n">data</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">parent</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">usize</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">first_child</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">usize</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">next_node</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">usize</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The only value that we know that is not optional is data other than that we don’t know much of a node without the position in the tree, adding that we can define all the possible configurations assumed by a node:</p>
+<ul>
+  <li>Root node
+    <ul>
+      <li>data</li>
+      <li>data and first_child</li>
+    </ul>
+  </li>
+  <li>Intermediate node
+    <ul>
+      <li>data, parent and first_child</li>
+      <li>data, parent, first_child and next_node</li>
+    </ul>
+  </li>
+  <li>Leaf node
+    <ul>
+      <li>data, parent</li>
+      <li>data, parent and next_node</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Note that the values listened are those that are not <code class="language-plaintext highlighter-rouge">None</code> inside the nodes. Please refer to the above <a href="/assets/images/arena_based_tree_logical_structure.png">logical structure</a> if the list is not clear enough.</p>
+</blockquote>
+
+<p>These are the conditions inside the tree:</p>
+<ul>
+  <li>A root will be always placed at index 0</li>
+  <li>A deleted node will have <code class="language-plaintext highlighter-rouge">parent</code> and <code class="language-plaintext highlighter-rouge">first_child</code> always set to None and <code class="language-plaintext highlighter-rouge">next_node</code> set to itself</li>
+  <li>The id/index of the nodes is dictated by the length of the vec</li>
+</ul>
+
+<p>Now we can declare the tree itself. The memory chunk is represented by a <code class="language-plaintext highlighter-rouge">Vec</code> structure.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">ArenaTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="p">{</span>
+    <span class="k">pub</span> <span class="n">nodes</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+    <span class="n">node_removed</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">usize</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note that the <code class="language-plaintext highlighter-rouge">node_removed</code> is used to keep the index if there is a node available, already deleted, to be taken when a new node is added.</p>
+</blockquote>
+
+<p>Next we can define the add child method:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">add_child</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">usize</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">std</span><span class="p">::</span><span class="nn">result</span><span class="p">::</span><span class="n">Result</span><span class="o">&lt;</span><span class="nb">usize</span><span class="p">,</span> <span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="c">// There is a root if the nodes vec is not empty</span>
+    <span class="k">let</span> <span class="n">has_root</span> <span class="o">=</span> <span class="o">!</span><span class="k">self</span><span class="py">.nodes</span><span class="nf">.is_empty</span><span class="p">();</span>
+    <span class="c">// Before setting the root checks if there is already one</span>
+    <span class="k">if</span> <span class="n">has_root</span> <span class="o">&amp;&amp;</span> <span class="n">parent</span><span class="nf">.is_none</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c">// The root is already set input are not valid</span>
+        <span class="k">return</span> <span class="nf">Err</span><span class="p">(());</span>
+    <span class="p">}</span>
+    <span class="c">// Takes the next index, it's just the length due to the fact that appends to a vec</span>
+    <span class="k">let</span> <span class="n">idx</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nodes</span><span class="nf">.len</span><span class="p">();</span>
+    <span class="k">let</span> <span class="n">child</span> <span class="o">=</span> <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">=</span> <span class="n">parent</span> <span class="p">{</span>
+        <span class="c">// If the parent exists</span>
+        <span class="k">if</span> <span class="k">self</span><span class="nf">.node_exists</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c">// Gets the parent node</span>
+            <span class="k">let</span> <span class="k">mut</span> <span class="n">parent_node</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">p</span><span class="p">];</span>
+            <span class="c">// Creates the child node attached to the parent</span>
+            <span class="k">let</span> <span class="n">node</span> <span class="o">=</span> <span class="nn">TreeNode</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">None</span><span class="p">,</span> <span class="n">parent_node</span><span class="py">.first_child</span><span class="p">);</span>
+            <span class="c">// Connects the child node to the parent</span>
+            <span class="n">parent_node</span><span class="py">.first_child</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="n">idx</span><span class="p">);</span>
+            <span class="n">node</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// The parent does not exist</span>
+            <span class="k">return</span> <span class="nf">Err</span><span class="p">(());</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c">// Checks if the root doesn't exists</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">has_root</span> <span class="p">{</span>
+            <span class="k">assert</span><span class="o">!</span><span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="c">// Creates the root node</span>
+            <span class="nn">TreeNode</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">None</span><span class="p">,</span> <span class="nb">None</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// The root already exists</span>
+            <span class="k">return</span> <span class="nf">Err</span><span class="p">(());</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="c">// Pushes the node created into the memory chunk</span>
+    <span class="k">self</span><span class="py">.nodes</span><span class="nf">.push</span><span class="p">(</span><span class="n">child</span><span class="p">);</span>
+    <span class="nf">Ok</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note that the method returns a Result because if the parent passed does not exist or there is already a root we cannot insert the value.</p>
+</blockquote>
+
+<p>We can now write the delete child method. What is needed is:</p>
+<ol>
+  <li>get the node;</li>
+  <li>remove the connection of the node with others nodes (siblings and children);</li>
+  <li>remove the parent from the deleted node;</li>
+  <li>use next node field as a self reference to mark it as deleted.</li>
+</ol>
+
+<p>Here the implementation:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">delete_child</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">std</span><span class="p">::</span><span class="nn">result</span><span class="p">::</span><span class="n">Result</span><span class="o">&lt;</span><span class="p">(),</span> <span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="c">// Gets the node to delete</span>
+    <span class="k">let</span> <span class="n">node_to_delete</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="c">// Checks if the node is already deleted</span>
+    <span class="k">if</span> <span class="n">node_to_delete</span><span class="py">.next_node</span> <span class="o">!=</span> <span class="nf">Some</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c">// Gets the parent node if present</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">=</span> <span class="n">node_to_delete</span><span class="py">.parent</span> <span class="p">{</span>
+            <span class="c">// Checks if the node in the parent is pointed as first child</span>
+            <span class="k">if</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="py">.first_child</span> <span class="o">==</span> <span class="nf">Some</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c">// If it is it's possible to detach it connecting the next node.</span>
+                <span class="c">// Next node could be Some or None</span>
+                <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="py">.first_child</span> <span class="o">=</span> <span class="n">node_to_delete</span><span class="py">.next_node</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="k">mut</span> <span class="n">node_found</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+                <span class="c">// If the node is not the first child of the parent searches inside the children list</span>
+                <span class="c">// All the siblings are attached together using the next_node field</span>
+                <span class="k">let</span> <span class="k">mut</span> <span class="n">node</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="py">.first_child</span><span class="p">;</span>
+                <span class="c">// While there is a node in the list</span>
+                <span class="k">while</span> <span class="n">node</span><span class="nf">.is_some</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">node</span><span class="nf">.unwrap</span><span class="p">();</span>
+                    <span class="c">// If the node is the one to delete</span>
+                    <span class="k">if</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="py">.next_node</span> <span class="o">==</span> <span class="nf">Some</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">node_found</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="c">// Continue inside the list the node is not the needed one</span>
+                        <span class="n">node</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="py">.next_node</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="c">// If the node was found it's possible to detach it</span>
+                <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="n">node_found</span> <span class="p">{</span>
+                    <span class="c">// Detaches the node in the siblings list and put the next node</span>
+                    <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="py">.next_node</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="py">.next_node</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="c">// If not the tree is inconsistent but not changes is made in the list of siblings</span>
+                    <span class="k">return</span> <span class="nf">Err</span><span class="p">(());</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c">// Detaches the current node and all the children iteratively,</span>
+        <span class="c">// because it's faster than recursion</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">queue</span> <span class="o">=</span> <span class="nn">VecDeque</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+        <span class="c">// Push the first node to delete</span>
+        <span class="n">queue</span><span class="nf">.push_front</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">first_node</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="k">while</span> <span class="o">!</span><span class="n">queue</span><span class="nf">.is_empty</span><span class="p">()</span> <span class="p">{</span>
+            <span class="c">// Pops the front node to start the deletion process</span>
+            <span class="k">let</span> <span class="n">n_index</span> <span class="o">=</span> <span class="n">queue</span><span class="nf">.pop_front</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
+            <span class="c">// Gets the node</span>
+            <span class="k">let</span> <span class="k">mut</span> <span class="n">n</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">n_index</span><span class="p">];</span>
+            <span class="c">// If it's not the first one queue the siblings otherwise is just the node we started with</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">first_node</span> <span class="p">{</span>
+                <span class="c">// Queues the next sibling</span>
+                <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">n</span><span class="py">.next_node</span> <span class="p">{</span>
+                    <span class="n">queue</span><span class="nf">.push_front</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">first_node</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c">// Queues the first child</span>
+            <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="n">n</span><span class="py">.first_child</span> <span class="p">{</span>
+                <span class="n">queue</span><span class="nf">.push_front</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="c">// Removes the node by removing the first child</span>
+            <span class="n">n</span><span class="py">.first_child</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+            <span class="c">// The parent</span>
+            <span class="n">n</span><span class="py">.parent</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+            <span class="c">// And using next_node to point to itself</span>
+            <span class="n">n</span><span class="py">.next_node</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="n">n_index</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="c">// Saves the new node deleted inside the tree</span>
+        <span class="k">self</span><span class="py">.node_deleted</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+        <span class="nf">Ok</span><span class="p">(())</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c">// The node is already deleted</span>
+        <span class="nf">Err</span><span class="p">(())</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note the remove child methods is creating empty spaces inside the memory chunk these can be reused if we need to insert a new node</p>
+</blockquote>
+
+<p>The add child method can be changed like this to reuse the deleted nodes:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">add_child</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">usize</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">std</span><span class="p">::</span><span class="nn">result</span><span class="p">::</span><span class="n">Result</span><span class="o">&lt;</span><span class="nb">usize</span><span class="p">,</span> <span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="c">// There is a root if the nodes vec is not empty and the first node is node deleted</span>
+    <span class="k">let</span> <span class="n">has_root</span> <span class="o">=</span> <span class="o">!</span><span class="k">self</span><span class="py">.nodes</span><span class="nf">.is_empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="py">.next_node</span> <span class="o">!=</span> <span class="nf">Some</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="c">// Before setting the root checks if there is already one</span>
+    <span class="k">if</span> <span class="n">has_root</span> <span class="o">&amp;&amp;</span> <span class="n">parent</span><span class="nf">.is_none</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c">// The root is already set input are not valid</span>
+        <span class="k">return</span> <span class="nf">Err</span><span class="p">(());</span>
+    <span class="p">}</span>
+    <span class="c">// Is there a deleted node we can reuse that space without allocation</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="o">=</span> <span class="k">self</span><span class="py">.node_deleted</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">=</span> <span class="n">parent</span> <span class="p">{</span>
+            <span class="c">// If the parent exists</span>
+            <span class="k">if</span> <span class="k">self</span><span class="nf">.node_exists</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c">// Temporary saves the current first child</span>
+                <span class="k">let</span> <span class="n">first_child</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="py">.first_child</span><span class="p">;</span>
+                <span class="c">// Sets the "new" node into the parent as first child</span>
+                <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="py">.first_child</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="n">idx</span><span class="p">);</span>
+                <span class="c">// Sets the next value as the previous first child</span>
+                <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="py">.next_node</span> <span class="o">=</span> <span class="n">first_child</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="c">// The parent does not exist</span>
+                <span class="k">return</span> <span class="nf">Err</span><span class="p">(());</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// Checks if the root doesn't exists</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">has_root</span> <span class="p">{</span>
+                <span class="k">assert</span><span class="o">!</span><span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="k">let</span> <span class="n">node</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+                <span class="n">node</span><span class="py">.parent</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+                <span class="n">node</span><span class="py">.next_node</span> <span class="o">=</span> <span class="nb">None</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="c">// The root already exists</span>
+                <span class="k">return</span> <span class="nf">Err</span><span class="p">(());</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+        <span class="c">// Checks if there is another node that can be used in a later insert</span>
+        <span class="k">self</span><span class="py">.node_deleted</span> <span class="o">=</span> <span class="k">self</span><span class="nf">.find_next_deleted</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="nf">Ok</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c">// Takes the next index, it's just the length due to the fact that appends to a vec</span>
+        <span class="k">let</span> <span class="n">idx</span> <span class="o">=</span> <span class="k">self</span><span class="py">.nodes</span><span class="nf">.len</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">child</span> <span class="o">=</span> <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">=</span> <span class="n">parent</span> <span class="p">{</span>
+            <span class="c">// If the parent exists</span>
+            <span class="k">if</span> <span class="k">self</span><span class="nf">.node_exists</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c">// Gets the parent node</span>
+                <span class="k">let</span> <span class="k">mut</span> <span class="n">parent_node</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="py">.nodes</span><span class="p">[</span><span class="n">p</span><span class="p">];</span>
+                <span class="c">// Creates the child node attached to the parent</span>
+                <span class="k">let</span> <span class="n">node</span> <span class="o">=</span> <span class="nn">TreeNode</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">None</span><span class="p">,</span> <span class="n">parent_node</span><span class="py">.first_child</span><span class="p">);</span>
+                <span class="c">// Connects the child node to the parent</span>
+                <span class="n">parent_node</span><span class="py">.first_child</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="n">idx</span><span class="p">);</span>
+                <span class="n">node</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="c">// The parent does not exist</span>
+                <span class="k">return</span> <span class="nf">Err</span><span class="p">(());</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// Checks if the root doesn't exists</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">has_root</span> <span class="p">{</span>
+                <span class="k">assert</span><span class="o">!</span><span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="c">// Creates the root node</span>
+                <span class="nn">TreeNode</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">None</span><span class="p">,</span> <span class="nb">None</span><span class="p">)</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="c">// The root already exists</span>
+                <span class="k">return</span> <span class="nf">Err</span><span class="p">(());</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+        <span class="c">// Pushes the node created into the memory chunk</span>
+        <span class="k">self</span><span class="py">.nodes</span><span class="nf">.push</span><span class="p">(</span><span class="n">child</span><span class="p">);</span>
+        <span class="nf">Ok</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note as we can reuse now the space that is left from the deletion</p>
+</blockquote>
+
+<p>For now this is it, in the next part we will find a way to pack all the node that are not deleted and discard what is left.</p>
+
+<p>See you next time!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-03-02T07:00:00+00:00">March 2, 2021</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/development/2021/02/23/markov-chain.html" class="pagination--pager" title="Let’s code it: Sentence/word generations
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/d-cap" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="http://linkedin.com/in/davide-capomagi-6a5186a" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="http://omgm.rocks" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-scroll" aria-hidden="true"></i> OMGM</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Let's code it!.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
