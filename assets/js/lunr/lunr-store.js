@@ -14,6 +14,12 @@ var store = [{
         "title": "Let's code it: Compact tree (part 1)",
         "excerpt":"You need a tree structure but you don’t want to pay the cost of single node allocation every time, moreover you want a structure cache friendly as much as possible? An arena based tree could be what you need. An arena based tree is a data structure that uses a...","categories": ["development"],
         "tags": ["rust","development","data structure"],
-        "url": "/development/2021/03/02/arena-tree.html",
+        "url": "/development/2021/03/03/arena-tree.html",
+        "teaser": null
+      },{
+        "title": "Let's code it: Compact tree (part 2)",
+        "excerpt":"In the previous post we defined the tree itself and the methods to add and delete a child. This post covers the pack and re-index functionality, this allows the removal of unused space and makes the tree more compact. The pack could be very useful to make the tree easier...","categories": ["development"],
+        "tags": ["rust","development","data structure"],
+        "url": "/development/2021/03/08/arena-tree-part-2.html",
         "teaser": null
       }]
