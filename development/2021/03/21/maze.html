@@ -1,0 +1,804 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Let’s code it: A-Maze-ing - Let’s code it!</title>
+<meta name="description" content="In our work sometimes is nice to experiment and today we will try to build a maze. This will be the partial animated result!">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Let's code it!">
+<meta property="og:title" content="Let’s code it: A-Maze-ing">
+<meta property="og:url" content="http://d-cap.github.io/development/2021/03/21/maze.html">
+
+
+  <meta property="og:description" content="In our work sometimes is nice to experiment and today we will try to build a maze. This will be the partial animated result!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-03-21T07:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://d-cap.github.io/development/2021/03/21/maze.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://d-cap.github.io/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Let's code it! Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <script data-ad-client="ca-pub-5955143626599578" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MJYLQ7BX8P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MJYLQ7BX8P');
+</script>
+
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Let's code it!
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Let’s code it: A-Maze-ing">
+    <meta itemprop="description" content="In our work sometimes is nice to experiment and today we will try to build a maze. This will be the partial animated result!">
+    <meta itemprop="datePublished" content="2021-03-21T07:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Let’s code it: A-Maze-ing
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>In our work sometimes is nice to experiment and today we will try to build a maze. This will be the partial animated result!</p>
+
+<p><img src="/assets/images/maze.jpg" alt="Maze" /></p>
+<blockquote>
+  <p>Note there are small graphical problems with the current implementation but we are interested in the maze algorithm code.</p>
+</blockquote>
+
+<h2 id="building-blocks">Building blocks</h2>
+<h3 id="the-cell">The cell</h3>
+<p>Firstly let’s define the smallest piece that composes a maze: a single cell. The cell needs to have the following properties:</p>
+<ol>
+  <li>Whether walls (top, right, bottom, left) are present or not in this cell;</li>
+  <li>Whether the cell is already visited.</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="nd">#[derive(Clone,</span> <span class="nd">Debug)]</span>
+<span class="k">pub</span> <span class="k">struct</span> <span class="n">Cell</span> <span class="p">{</span>
+    <span class="n">t</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">r</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">l</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">visited</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">Default</span> <span class="k">for</span> <span class="n">Cell</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">default</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="n">Cell</span> <span class="p">{</span>
+            <span class="n">t</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">r</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">b</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">l</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">visited</span><span class="p">:</span> <span class="k">false</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="the-grid">The grid</h3>
+<p>Next, we need to define the base data structure we will use for the maze generation. Considering that in Rust there is not matrix built inside the language and the fact that a Vec of Vecs is not a very cache friendly idea (remember that inside the first Vec we could store only the reference to the inside Vecs) we want to build everything using a single array. From the image below you can see the logical and the memory representation that we will use:</p>
+
+<p><img src="/assets/images/maze_grid.png" alt="Grid" /></p>
+
+<p>To calculate the index of a single cell, some math can be applied. To move to the correct position, we need to multiply the y of our coordinates by the width of the grid (to get the row position) and add the x that represents the offset on the row.</p>
+
+<p>Following the code for all the methods that we will use for the maze generation:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">Grid</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Clone</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Grid</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="k">where</span>
+    <span class="n">T</span><span class="p">:</span> <span class="n">Clone</span><span class="p">,</span>
+<span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="n">Self</span> <span class="p">{</span>
+            <span class="c">// Duplicates the defalt data value</span>
+            <span class="n">data</span><span class="p">:</span> <span class="nd">vec!</span><span class="p">[</span><span class="n">data</span><span class="p">;</span> <span class="n">width</span> <span class="o">*</span> <span class="n">height</span><span class="p">],</span>
+            <span class="n">width</span><span class="p">,</span>
+            <span class="n">height</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Returns the value using the coordinates</span>
+    <span class="nd">#[inline]</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_value</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="n">T</span> <span class="p">{</span>
+        <span class="o">&amp;</span><span class="k">self</span><span class="py">.data</span><span class="p">[(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="k">self</span><span class="py">.width</span><span class="p">)</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Returns the mutable value using the coordinates</span>
+    <span class="nd">#[inline]</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_value_with_index_mut</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">T</span> <span class="p">{</span>
+        <span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="py">.data</span><span class="p">[</span><span class="n">index</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Returns the value of the cell above the current index</span>
+    <span class="nd">#[inline]</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_top_index</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">T</span><span class="p">,</span> <span class="nb">usize</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="c">// The above cell is at the same column in the row above.</span>
+        <span class="c">// Subtracting the width will move the index to the correct value</span>
+        <span class="k">let</span> <span class="n">top</span><span class="p">:</span> <span class="nb">i32</span> <span class="o">=</span> <span class="n">index</span> <span class="k">as</span> <span class="nb">i32</span> <span class="o">-</span> <span class="k">self</span><span class="py">.width</span> <span class="k">as</span> <span class="nb">i32</span><span class="p">;</span>
+        <span class="c">// Checks if the new calculated index is outside the grid, in case the original index is on the first row</span>
+        <span class="k">if</span> <span class="n">top</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">((</span><span class="o">&amp;</span><span class="k">self</span><span class="py">.data</span><span class="p">[</span><span class="n">top</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">],</span> <span class="n">top</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">))</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nb">None</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Returns the value of the cell on the right of the current index</span>
+    <span class="nd">#[inline]</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_right_index</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">T</span><span class="p">,</span> <span class="nb">usize</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="c">// To calculate the right cell add one to the current index</span>
+        <span class="k">let</span> <span class="n">right_index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="c">// Checks if the new index is outside of the grid</span>
+        <span class="c">// Checks if the new index is on the same row of the input index otherwise the new index is not present</span>
+        <span class="k">if</span> <span class="n">right_index</span> <span class="o">&lt;</span> <span class="k">self</span><span class="py">.data</span><span class="nf">.len</span><span class="p">()</span> <span class="k">as</span> <span class="nb">usize</span>
+            <span class="o">&amp;&amp;</span> <span class="k">self</span><span class="nf">.are_indices_on_same_row</span><span class="p">(</span><span class="n">index</span> <span class="k">as</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">right_index</span> <span class="k">as</span> <span class="nb">i32</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">((</span><span class="o">&amp;</span><span class="k">self</span><span class="py">.data</span><span class="p">[</span><span class="n">right_index</span><span class="p">],</span> <span class="n">right_index</span><span class="p">))</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nb">None</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Returns the value of the cell above the current index</span>
+    <span class="nd">#[inline]</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_bottom_index</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">T</span><span class="p">,</span> <span class="nb">usize</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="c">// The bottom cell is at the same column in the row above.</span>
+        <span class="c">// Adding the width will move the index to the correct value</span>
+        <span class="k">let</span> <span class="n">bottom</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="k">self</span><span class="py">.width</span><span class="p">;</span>
+        <span class="c">// Checks if the new calculated index is outside the grid, in case the original index is on the last row</span>
+        <span class="k">if</span> <span class="n">bottom</span> <span class="o">&lt;</span> <span class="k">self</span><span class="py">.data</span><span class="nf">.len</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">((</span><span class="o">&amp;</span><span class="k">self</span><span class="py">.data</span><span class="p">[</span><span class="n">bottom</span><span class="p">],</span> <span class="n">bottom</span><span class="p">))</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nb">None</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Returns the value of the cell on the right of the current index</span>
+    <span class="nd">#[inline]</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_left_index</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">T</span><span class="p">,</span> <span class="nb">usize</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="c">// To calculate the left cell remove one to the current index</span>
+        <span class="k">let</span> <span class="n">left_index</span> <span class="o">=</span> <span class="n">index</span> <span class="k">as</span> <span class="nb">i32</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="c">// Checks if the new index is outside of the grid</span>
+        <span class="c">// Checks if the new index is on the same row of the input index otherwise the new index is not present</span>
+        <span class="k">if</span> <span class="n">left_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="k">self</span><span class="nf">.are_indices_on_same_row</span><span class="p">(</span><span class="n">index</span> <span class="k">as</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">left_index</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">((</span><span class="o">&amp;</span><span class="k">self</span><span class="py">.data</span><span class="p">[</span><span class="n">left_index</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">],</span> <span class="n">left_index</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">))</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nb">None</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Checks if the indices are on the same row, this is used to check if the left and right are present or not</span>
+    <span class="nd">#[inline]</span>
+    <span class="k">fn</span> <span class="nf">are_indices_on_same_row</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">index_a</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">index_b</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">converted_width</span> <span class="o">=</span> <span class="k">self</span><span class="py">.width</span> <span class="k">as</span> <span class="nb">i32</span><span class="p">;</span>
+        <span class="c">// Calculates the start index for the current row</span>
+        <span class="k">let</span> <span class="n">index_a_row</span> <span class="o">=</span> <span class="n">index_a</span> <span class="o">/</span> <span class="n">converted_width</span> <span class="o">*</span> <span class="n">converted_width</span><span class="p">;</span>
+        <span class="c">// Calculates the start index of the next row</span>
+        <span class="k">let</span> <span class="n">next_row</span> <span class="o">=</span> <span class="n">index_a_row</span> <span class="o">+</span> <span class="n">converted_width</span><span class="p">;</span>
+        <span class="n">index_b</span> <span class="o">&gt;=</span> <span class="n">index_a_row</span> <span class="o">&amp;&amp;</span> <span class="n">index_b</span> <span class="o">&lt;</span> <span class="n">next_row</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Returns the size of the entire maze</span>
+    <span class="nd">#[inline]</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">cell_count</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.data</span><span class="nf">.len</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note that <code class="language-plaintext highlighter-rouge">T</code> needs to be <code class="language-plaintext highlighter-rouge">Clone</code> because of this line <code class="language-plaintext highlighter-rouge">data: vec![data; width * height]</code>, the value is cloned multiple times at this point. This is to initialize the entire grid with a single default (in this case) value.</p>
+</blockquote>
+
+<h3 id="the-maze">The maze</h3>
+<p>The next step is to the define the struct that will maintain the entire maze in memory. This is defined by the following fields:</p>
+<ul>
+  <li>data: it’s the grid that will contain all the cells;</li>
+  <li>current: the index of the cell currently working on;</li>
+  <li>stack: this will collect the cells in the exploration phase, is needed only because we allow the maze not only to be pre-rendered but even to be calculated step by step;</li>
+  <li>completed: this is to check if the maze is completed or not, will be used in the exploration phase to see if there is remaining work to perform;</li>
+  <li>config: a struct that manages our random value.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">struct</span> <span class="n">Maze</span> <span class="p">{</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Grid</span><span class="o">&lt;</span><span class="n">Cell</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">current</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+    <span class="n">stack</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">usize</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">completed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">Maze</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">pre_render</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">maze</span> <span class="o">=</span> <span class="n">Self</span> <span class="p">{</span>
+            <span class="n">data</span><span class="p">:</span> <span class="nn">Grid</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Cell</span><span class="p">::</span><span class="nf">default</span><span class="p">(),</span> <span class="n">width</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">height</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">),</span>
+            <span class="n">width</span><span class="p">,</span>
+            <span class="n">height</span><span class="p">,</span>
+            <span class="n">current</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">stack</span><span class="p">:</span> <span class="nn">Vec</span><span class="p">::</span><span class="o">&lt;</span><span class="nb">usize</span><span class="o">&gt;</span><span class="p">::</span><span class="nf">new</span><span class="p">(),</span>
+            <span class="n">completed</span><span class="p">:</span> <span class="k">false</span><span class="p">,</span>
+            <span class="n">config</span><span class="p">,</span>
+        <span class="p">};</span>
+
+        <span class="k">while</span> <span class="n">pre_render</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">maze</span><span class="py">.completed</span> <span class="p">{</span>
+            <span class="n">maze</span><span class="nf">.update</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">maze</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Returns the cell at coordinates</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_cell</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="n">Cell</span> <span class="p">{</span>
+        <span class="o">&amp;</span><span class="k">self</span><span class="py">.data</span><span class="nf">.get_value</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Checks if the cell at coordinates is the current for the exploration</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">is_current</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.current</span> <span class="o">==</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="k">self</span><span class="py">.data.width</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span> <span class="n">Config</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">random</span><span class="p">:</span> <span class="n">Xoshiro256Plus</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">Config</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">create_config</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">u64</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">random</span> <span class="o">=</span> <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">seed</span> <span class="p">{</span>
+            <span class="nn">Xoshiro256Plus</span><span class="p">::</span><span class="nf">seed_from_u64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nn">Xoshiro256Plus</span><span class="p">::</span><span class="nf">seed_from_u64</span><span class="p">(</span><span class="nf">thread_rng</span><span class="p">()</span><span class="nf">.next_u64</span><span class="p">())</span>
+        <span class="p">};</span>
+        <span class="n">Self</span> <span class="p">{</span> <span class="n">random</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="the-algorithm">The algorithm</h2>
+<p>The central piece is very simple, these are the steps executed:</p>
+<ol>
+  <li>Mark the current cell al visited, the first time will be (0, 0);</li>
+  <li>Search for a new cell to visit, this could be a neighbour of the current cell or a cell in the stack:
+    <ol>
+      <li>If there a neighbour push that into the stack, remove the wall between this cell and the current using a direction, and make the neighbour the current cell;</li>
+      <li>If there isn’t a neighbour extract a cell from the stack.</li>
+    </ol>
+  </li>
+  <li>When there are no cell into the stack and no neighbours of the current cell the exploration is finished.</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">impl</span> <span class="n">Maze</span> <span class="p">{</span>
+    <span class="c">/// Move the maze into the next step of the exploration</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">update</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c">// Gets the current cell for the exploration</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">current</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="py">.data</span><span class="nf">.get_value_with_index_mut</span><span class="p">(</span><span class="k">self</span><span class="py">.current</span><span class="p">);</span>
+        <span class="c">// Sets the current cell to be visited</span>
+        <span class="n">current</span><span class="py">.visited</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="c">// Gets a neighbour for the current cell</span>
+        <span class="k">let</span> <span class="n">neighbours</span> <span class="o">=</span> <span class="k">self</span><span class="nf">.get_next_neighbour</span><span class="p">();</span>
+        <span class="c">// Checks if the stack is not empty or there are other neighbours to visit</span>
+        <span class="k">if</span> <span class="o">!</span><span class="k">self</span><span class="py">.stack</span><span class="nf">.is_empty</span><span class="p">()</span> <span class="p">||</span> <span class="n">neighbours</span><span class="nf">.is_some</span><span class="p">()</span> <span class="p">{</span>
+            <span class="c">// If the are neighbour cells to explore</span>
+            <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">direction</span><span class="p">))</span> <span class="o">=</span> <span class="n">neighbours</span> <span class="p">{</span>
+                <span class="c">// Puts the neighbour in the stack of cell to visit</span>
+                <span class="k">self</span><span class="py">.stack</span><span class="nf">.push</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+                <span class="c">// Removes the wall in the chosen direction</span>
+                <span class="k">self</span><span class="nf">.remove_walls</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">direction</span><span class="p">);</span>
+                <span class="c">// Moves the current cell index to the new neighbour to continue the exploration</span>
+                <span class="k">self</span><span class="py">.current</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="c">// Otherwise takes a cell from the stack because there are no neighbours available</span>
+                <span class="c">// Unwrap can be safely called here because there is already a check for the empty stack (there are not neighbours)</span>
+                <span class="k">self</span><span class="py">.current</span> <span class="o">=</span> <span class="k">self</span><span class="py">.stack</span><span class="nf">.pop</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// There are no more cell to explore</span>
+            <span class="k">self</span><span class="py">.completed</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">/// Gets a neighbour around the current cell</span>
+    <span class="k">fn</span> <span class="nf">get_next_neighbour</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="p">(</span><span class="nb">usize</span><span class="p">,</span> <span class="n">Direction</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="c">// Collect all the possible neighbours</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">result</span> <span class="o">=</span> <span class="nn">Vec</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+        <span class="c">// Top</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">((</span><span class="n">top_cell</span><span class="p">,</span> <span class="n">index</span><span class="p">))</span> <span class="o">=</span> <span class="k">self</span><span class="py">.data</span><span class="nf">.get_top_index</span><span class="p">(</span><span class="k">self</span><span class="py">.current</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">top_cell</span><span class="py">.visited</span> <span class="p">{</span>
+                <span class="n">result</span><span class="nf">.push</span><span class="p">((</span><span class="n">index</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">,</span> <span class="nn">Direction</span><span class="p">::</span><span class="n">Top</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c">// Right</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">((</span><span class="n">right_cell</span><span class="p">,</span> <span class="n">index</span><span class="p">))</span> <span class="o">=</span> <span class="k">self</span><span class="py">.data</span><span class="nf">.get_right_index</span><span class="p">(</span><span class="k">self</span><span class="py">.current</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">right_cell</span><span class="py">.visited</span> <span class="p">{</span>
+                <span class="n">result</span><span class="nf">.push</span><span class="p">(((</span><span class="n">index</span><span class="p">)</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">,</span> <span class="nn">Direction</span><span class="p">::</span><span class="nb">Right</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c">// Bottom</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">((</span><span class="n">bottom_cell</span><span class="p">,</span> <span class="n">index</span><span class="p">))</span> <span class="o">=</span> <span class="k">self</span><span class="py">.data</span><span class="nf">.get_bottom_index</span><span class="p">(</span><span class="k">self</span><span class="py">.current</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">bottom_cell</span><span class="py">.visited</span> <span class="p">{</span>
+                <span class="n">result</span><span class="nf">.push</span><span class="p">(((</span><span class="n">index</span><span class="p">)</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">,</span> <span class="nn">Direction</span><span class="p">::</span><span class="n">Bottom</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c">// Left</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">((</span><span class="n">left_cell</span><span class="p">,</span> <span class="n">index</span><span class="p">))</span> <span class="o">=</span> <span class="k">self</span><span class="py">.data</span><span class="nf">.get_left_index</span><span class="p">(</span><span class="k">self</span><span class="py">.current</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">left_cell</span><span class="py">.visited</span> <span class="p">{</span>
+                <span class="n">result</span><span class="nf">.push</span><span class="p">(((</span><span class="n">index</span><span class="p">)</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">,</span> <span class="nn">Direction</span><span class="p">::</span><span class="nb">Left</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c">// Checks if there are neighbour</span>
+        <span class="k">if</span> <span class="n">result</span><span class="nf">.is_empty</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nb">None</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// Chooses a random direction</span>
+            <span class="nf">Some</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="k">self</span><span class="py">.config.random</span><span class="nf">.gen_range</span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="n">result</span><span class="nf">.len</span><span class="p">())])</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">fn</span> <span class="nf">remove_walls</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">next</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c">// Depending on the direction remove the walls from the current cell and the "next"</span>
+        <span class="c">// To remove a wall we can just mark the walls of the adjacent cells as false</span>
+        <span class="k">match</span> <span class="n">direction</span> <span class="p">{</span>
+            <span class="nn">Direction</span><span class="p">::</span><span class="n">Top</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">self</span><span class="py">.data</span><span class="nf">.get_value_with_index_mut</span><span class="p">(</span><span class="k">self</span><span class="py">.current</span><span class="p">)</span><span class="py">.t</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">self</span><span class="py">.data</span><span class="nf">.get_value_with_index_mut</span><span class="p">(</span><span class="n">next</span><span class="p">)</span><span class="py">.b</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nn">Direction</span><span class="p">::</span><span class="nb">Right</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">self</span><span class="py">.data</span><span class="nf">.get_value_with_index_mut</span><span class="p">(</span><span class="k">self</span><span class="py">.current</span><span class="p">)</span><span class="py">.r</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">self</span><span class="py">.data</span><span class="nf">.get_value_with_index_mut</span><span class="p">(</span><span class="n">next</span><span class="p">)</span><span class="py">.l</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nn">Direction</span><span class="p">::</span><span class="n">Bottom</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">self</span><span class="py">.data</span><span class="nf">.get_value_with_index_mut</span><span class="p">(</span><span class="k">self</span><span class="py">.current</span><span class="p">)</span><span class="py">.b</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">self</span><span class="py">.data</span><span class="nf">.get_value_with_index_mut</span><span class="p">(</span><span class="n">next</span><span class="p">)</span><span class="py">.t</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nn">Direction</span><span class="p">::</span><span class="nb">Left</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="k">self</span><span class="py">.data</span><span class="nf">.get_value_with_index_mut</span><span class="p">(</span><span class="k">self</span><span class="py">.current</span><span class="p">)</span><span class="py">.l</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">self</span><span class="py">.data</span><span class="nf">.get_value_with_index_mut</span><span class="p">(</span><span class="n">next</span><span class="p">)</span><span class="py">.r</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">/// Used to identify the wall that will be removed</span>
+<span class="nd">#[derive(Clone,</span> <span class="nd">Copy,</span> <span class="nd">Debug)]</span>
+<span class="k">enum</span> <span class="n">Direction</span> <span class="p">{</span>
+    <span class="n">Top</span><span class="p">,</span>
+    <span class="nb">Right</span><span class="p">,</span>
+    <span class="n">Bottom</span><span class="p">,</span>
+    <span class="nb">Left</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="drawing-it">Drawing it</h2>
+<p>To draw the generated maze we will use SDL2 because is pretty simple to setup and use. The algorithm used to draw the maze is the following:</p>
+<ol>
+  <li>Setup SDL2;</li>
+  <li>Create the maze;</li>
+  <li>For each frame update the maze exploring a new cell if not completed;</li>
+  <li>Draw all the cell of the maze (blue for those visited, light blue for those not touched).</li>
+</ol>
+
+<p>To draw each cell we are going to draw the cell itself (a rect) and four lines: top, right, bottom, left. If the wall is not present the line will not be drawn.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c">// Initialises sdl2</span>
+    <span class="k">let</span> <span class="n">sdl</span> <span class="o">=</span> <span class="nn">sdl2</span><span class="p">::</span><span class="nf">init</span><span class="p">()</span><span class="nf">.expect</span><span class="p">(</span><span class="s">"Impossible to load sdl"</span><span class="p">);</span>
+
+    <span class="c">// Hides the mouse in the window</span>
+    <span class="n">sdl</span><span class="nf">.mouse</span><span class="p">()</span><span class="nf">.show_cursor</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+    <span class="n">sdl</span><span class="nf">.mouse</span><span class="p">()</span><span class="nf">.capture</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+
+    <span class="c">// Creates the video system used to draw</span>
+    <span class="k">let</span> <span class="n">video_system</span> <span class="o">=</span> <span class="n">sdl</span><span class="nf">.video</span><span class="p">()</span><span class="nf">.expect</span><span class="p">(</span><span class="s">"No video subsystem available"</span><span class="p">);</span>
+
+    <span class="c">// Disables antialiasing, this is because lines are straight and precise, enabling this could cause strange effects</span>
+    <span class="k">let</span> <span class="n">gl_attr</span> <span class="o">=</span> <span class="n">video_system</span><span class="nf">.gl_attr</span><span class="p">();</span>
+    <span class="n">gl_attr</span><span class="nf">.set_multisample_buffers</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">gl_attr</span><span class="nf">.set_multisample_samples</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">gl_attr</span><span class="nf">.set_accelerated_visual</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+
+    <span class="c">// A pixel more is needed because how the cell are drawn</span>
+    <span class="k">let</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">1601</span><span class="p">;</span>
+    <span class="k">let</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">901</span><span class="p">;</span>
+    <span class="c">// Creates the window where the draw will be display</span>
+    <span class="k">let</span> <span class="n">window</span> <span class="o">=</span> <span class="n">video_system</span>
+        <span class="nf">.window</span><span class="p">(</span><span class="s">"Game"</span><span class="p">,</span> <span class="n">width</span> <span class="k">as</span> <span class="nb">u32</span><span class="p">,</span> <span class="n">height</span> <span class="k">as</span> <span class="nb">u32</span><span class="p">)</span>
+        <span class="nf">.build</span><span class="p">()</span>
+        <span class="nf">.expect</span><span class="p">(</span><span class="s">"A window cannot be created"</span><span class="p">);</span>
+
+    <span class="c">// Creates the canvas that will be used to draw</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">canvas</span> <span class="o">=</span> <span class="n">window</span>
+        <span class="nf">.into_canvas</span><span class="p">()</span>
+        <span class="nf">.build</span><span class="p">()</span>
+        <span class="nf">.expect</span><span class="p">(</span><span class="s">"A canvas cannot be created"</span><span class="p">);</span>
+
+    <span class="c">// Needed to capture input from keyboard</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">event_pump</span> <span class="o">=</span> <span class="n">sdl</span><span class="nf">.event_pump</span><span class="p">()</span><span class="nf">.expect</span><span class="p">(</span><span class="s">"No event pump"</span><span class="p">);</span>
+
+    <span class="c">// Timer is used to cap the number of frames per second</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">sdl</span><span class="nf">.timer</span><span class="p">()</span><span class="nf">.expect</span><span class="p">(</span><span class="s">"No timer"</span><span class="p">);</span>
+
+    <span class="c">// Used to check if the application should continue to run or not</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">running</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+
+    <span class="c">// Used to calculate the frame cap in milliseconds</span>
+    <span class="k">let</span> <span class="n">fps_cap</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">;</span>
+
+    <span class="c">// The size of the single cell inside the maze</span>
+    <span class="k">let</span> <span class="n">side</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">maze</span> <span class="o">=</span> <span class="nn">Maze</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
+        <span class="n">width</span> <span class="k">as</span> <span class="nb">usize</span> <span class="o">/</span> <span class="n">side</span><span class="p">,</span>
+        <span class="n">height</span> <span class="k">as</span> <span class="nb">usize</span> <span class="o">/</span> <span class="n">side</span><span class="p">,</span>
+        <span class="k">false</span><span class="p">,</span>
+        <span class="nn">Config</span><span class="p">::</span><span class="nf">create_config</span><span class="p">(</span><span class="nf">Some</span><span class="p">(</span><span class="mi">1234</span><span class="p">)),</span>
+    <span class="p">);</span>
+    <span class="k">while</span> <span class="n">running</span> <span class="p">{</span>
+        <span class="c">// Gets the performance counter to calculate at the end if a pause is needed (frame-cap)</span>
+        <span class="k">let</span> <span class="n">start</span> <span class="o">=</span> <span class="n">timer</span><span class="nf">.performance_counter</span><span class="p">();</span>
+
+        <span class="c">// Gets input from keyboard</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="n">in</span> <span class="n">event_pump</span><span class="nf">.poll_iter</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">match</span> <span class="n">event</span> <span class="p">{</span>
+                <span class="c">// Do we need to quit?</span>
+                <span class="nn">Event</span><span class="p">::</span><span class="n">Quit</span> <span class="p">{</span> <span class="o">..</span> <span class="p">}</span>
+                <span class="p">|</span> <span class="nn">Event</span><span class="p">::</span><span class="n">KeyDown</span> <span class="p">{</span>
+                    <span class="n">keycode</span><span class="p">:</span> <span class="nf">Some</span><span class="p">(</span><span class="nn">Keycode</span><span class="p">::</span><span class="n">Escape</span><span class="p">),</span>
+                    <span class="o">..</span>
+                <span class="p">}</span> <span class="k">=&gt;</span> <span class="n">running</span> <span class="o">=</span> <span class="k">false</span><span class="p">,</span>
+                <span class="mi">_</span> <span class="k">=&gt;</span> <span class="p">{}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c">// Updates the maze step by step if not completed</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">maze</span><span class="py">.completed</span> <span class="p">{</span>
+            <span class="n">maze</span><span class="nf">.update</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="c">// Clears the screen</span>
+        <span class="n">canvas</span><span class="nf">.set_draw_color</span><span class="p">(</span><span class="nn">Color</span><span class="p">::</span><span class="nf">RGB</span><span class="p">(</span><span class="mi">92</span><span class="p">,</span> <span class="mi">137</span><span class="p">,</span> <span class="mi">179</span><span class="p">));</span>
+        <span class="n">canvas</span><span class="nf">.clear</span><span class="p">();</span>
+        <span class="c">// Render the current state of the maze</span>
+        <span class="nf">render</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">canvas</span><span class="p">,</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">maze</span><span class="p">,</span> <span class="n">side</span> <span class="k">as</span> <span class="nb">i32</span><span class="p">);</span>
+
+        <span class="c">// Draws everything on the screen</span>
+        <span class="n">canvas</span><span class="nf">.present</span><span class="p">();</span>
+
+        <span class="c">// Gets the performance counter, calculate the elapsed</span>
+        <span class="k">let</span> <span class="n">end</span> <span class="o">=</span> <span class="n">timer</span><span class="nf">.performance_counter</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="k">as</span> <span class="nb">f32</span> <span class="o">/</span> <span class="n">timer</span><span class="nf">.performance_frequency</span><span class="p">()</span> <span class="k">as</span> <span class="nb">f32</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">;</span>
+
+        <span class="c">// If needed delay the next frame</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fps_cap</span> <span class="o">-</span> <span class="n">elapsed</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="p">{</span>
+            <span class="n">timer</span><span class="nf">.delay</span><span class="p">((</span><span class="n">fps_cap</span> <span class="o">-</span> <span class="n">elapsed</span><span class="p">)</span><span class="nf">.floor</span><span class="p">()</span> <span class="k">as</span> <span class="nb">u32</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">// Renders the current state of the maze on the canvas</span>
+<span class="k">fn</span> <span class="nf">render</span><span class="p">(</span><span class="n">canvas</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Canvas</span><span class="o">&lt;</span><span class="n">Window</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">maze</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Maze</span><span class="p">,</span> <span class="n">side</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">rows</span> <span class="o">=</span> <span class="n">maze</span><span class="py">.data.height</span><span class="p">;</span>
+    <span class="k">let</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">maze</span><span class="py">.data.width</span><span class="p">;</span>
+    <span class="c">// Loops over the grid</span>
+    <span class="k">for</span> <span class="n">y</span> <span class="n">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">rows</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="n">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">columns</span> <span class="p">{</span>
+            <span class="c">// Gets the cell that needs to be drawn</span>
+            <span class="k">let</span> <span class="n">cell</span> <span class="o">=</span> <span class="n">maze</span><span class="nf">.get_cell</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+            <span class="c">// Draws the cell</span>
+            <span class="nf">draw_cell</span><span class="p">(</span>
+                <span class="n">canvas</span><span class="p">,</span>
+                <span class="n">cell</span><span class="p">,</span>
+                <span class="c">// Calculates the x and y position using the width of the cell</span>
+                <span class="c">// This is needed to calculate the real offset on the screen</span>
+                <span class="n">x</span> <span class="k">as</span> <span class="nb">i32</span> <span class="o">*</span> <span class="n">side</span><span class="p">,</span>
+                <span class="n">y</span> <span class="k">as</span> <span class="nb">i32</span> <span class="o">*</span> <span class="n">side</span><span class="p">,</span>
+                <span class="n">side</span><span class="p">,</span>
+                <span class="c">// If the cell in the current one and the maze is not completed, draw it</span>
+                <span class="k">if</span> <span class="n">maze</span><span class="nf">.is_current</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">maze</span><span class="py">.completed</span> <span class="p">{</span>
+                    <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">87</span><span class="p">)</span>
+                <span class="p">},</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="nf">draw_cell</span><span class="p">(</span>
+    <span class="n">canvas</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Canvas</span><span class="o">&lt;</span><span class="n">Window</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">cell</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Cell</span><span class="p">,</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span>
+    <span class="n">side</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span>
+    <span class="n">colour</span><span class="p">:</span> <span class="p">(</span><span class="nb">u8</span><span class="p">,</span> <span class="nb">u8</span><span class="p">,</span> <span class="nb">u8</span><span class="p">,</span> <span class="nb">u8</span><span class="p">),</span>
+<span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+    <span class="k">let</span> <span class="n">line_colour</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">);</span>
+    <span class="c">// If the cell is visited draw it, otherwise will be empty to see the background</span>
+    <span class="k">if</span> <span class="n">cell</span><span class="py">.visited</span> <span class="p">{</span>
+        <span class="nf">draw_rect</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">side</span> <span class="k">as</span> <span class="nb">u32</span><span class="p">,</span> <span class="n">side</span> <span class="k">as</span> <span class="nb">u32</span><span class="p">,</span> <span class="n">colour</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="c">// If present draw top wall</span>
+    <span class="k">if</span> <span class="n">cell</span><span class="py">.t</span> <span class="p">{</span>
+        <span class="nf">draw_line</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">side</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">scale</span><span class="p">,</span> <span class="n">line_colour</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="c">// If present draw bottom wall</span>
+    <span class="k">if</span> <span class="n">cell</span><span class="py">.b</span> <span class="p">{</span>
+        <span class="nf">draw_line</span><span class="p">(</span>
+            <span class="n">canvas</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">side</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">side</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">side</span><span class="p">),</span>
+            <span class="n">scale</span><span class="p">,</span>
+            <span class="n">line_colour</span><span class="p">,</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="c">// If present draw right wall</span>
+    <span class="k">if</span> <span class="n">cell</span><span class="py">.r</span> <span class="p">{</span>
+        <span class="nf">draw_line</span><span class="p">(</span>
+            <span class="n">canvas</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">side</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">side</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">side</span><span class="p">),</span>
+            <span class="n">scale</span><span class="p">,</span>
+            <span class="n">line_colour</span><span class="p">,</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="c">// If present draw left wall</span>
+    <span class="k">if</span> <span class="n">cell</span><span class="py">.l</span> <span class="p">{</span>
+        <span class="nf">draw_line</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">side</span><span class="p">),</span> <span class="n">scale</span><span class="p">,</span> <span class="n">line_colour</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="nf">draw_rect</span><span class="p">(</span><span class="n">canvas</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Canvas</span><span class="o">&lt;</span><span class="n">Window</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="nb">u32</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="nb">u32</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="p">(</span><span class="nb">u8</span><span class="p">,</span> <span class="nb">u8</span><span class="p">,</span> <span class="nb">u8</span><span class="p">,</span> <span class="nb">u8</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c">// Sets the colour</span>
+    <span class="n">canvas</span><span class="nf">.set_draw_color</span><span class="p">(</span><span class="nn">Color</span><span class="p">::</span><span class="nf">RGBA</span><span class="p">(</span><span class="n">color</span><span class="na">.1</span><span class="p">,</span> <span class="n">color</span><span class="na">.2</span><span class="p">,</span> <span class="n">color</span><span class="na">.3</span><span class="p">,</span> <span class="n">color</span><span class="na">.0</span><span class="p">));</span>
+    <span class="c">// Draws a single rect using the previous colour</span>
+    <span class="n">canvas</span><span class="nf">.fill_rect</span><span class="p">(</span><span class="nn">Rect</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span><span class="nf">.unwrap</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="nf">draw_line</span><span class="p">(</span>
+    <span class="n">canvas</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Canvas</span><span class="o">&lt;</span><span class="n">Window</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">start</span><span class="p">:</span> <span class="p">(</span><span class="nb">i32</span><span class="p">,</span> <span class="nb">i32</span><span class="p">),</span>
+    <span class="n">end</span><span class="p">:</span> <span class="p">(</span><span class="nb">i32</span><span class="p">,</span> <span class="nb">i32</span><span class="p">),</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">f32</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="p">(</span><span class="nb">u8</span><span class="p">,</span> <span class="nb">u8</span><span class="p">,</span> <span class="nb">u8</span><span class="p">,</span> <span class="nb">u8</span><span class="p">),</span>
+<span class="p">)</span> <span class="p">{</span>
+    <span class="c">// Sets the colour</span>
+    <span class="n">canvas</span><span class="nf">.set_draw_color</span><span class="p">(</span><span class="nn">Color</span><span class="p">::</span><span class="nf">RGBA</span><span class="p">(</span><span class="n">color</span><span class="na">.1</span><span class="p">,</span> <span class="n">color</span><span class="na">.2</span><span class="p">,</span> <span class="n">color</span><span class="na">.3</span><span class="p">,</span> <span class="n">color</span><span class="na">.0</span><span class="p">));</span>
+    <span class="c">// Sets the width of the line</span>
+    <span class="n">canvas</span><span class="nf">.set_scale</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span><span class="nf">.unwrap</span><span class="p">();</span>
+    <span class="c">// Draws a line using the colour and the width</span>
+    <span class="n">canvas</span>
+        <span class="nf">.draw_line</span><span class="p">(</span><span class="nn">Point</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">start</span><span class="na">.0</span><span class="p">,</span> <span class="n">start</span><span class="na">.1</span><span class="p">),</span> <span class="nn">Point</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">end</span><span class="na">.0</span><span class="p">,</span> <span class="n">end</span><span class="na">.1</span><span class="p">))</span>
+        <span class="nf">.unwrap</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note the framerate is capped at 60 fps (16 ms per frame) otherwise, the application is going to use too many resources, and we would like to see the maze appearing in front of us a little at a time instead of all at once.</p>
+</blockquote>
+
+<p>See you next time!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-03-21T07:00:00+00:00">March 21, 2021</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/development/2021/03/08/arena-tree-part-2.html" class="pagination--pager" title="Let’s code it: Compact tree (part 2)
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/d-cap" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="http://linkedin.com/in/davide-capomagi-6a5186a" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="http://omgm.rocks" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-scroll" aria-hidden="true"></i> OMGM</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Let's code it!.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

@@ -22,4 +22,10 @@ var store = [{
         "tags": ["rust","development","data structure"],
         "url": "/development/2021/03/08/arena-tree-part-2.html",
         "teaser": null
+      },{
+        "title": "Let's code it: A-Maze-ing",
+        "excerpt":"In our work sometimes is nice to experiment and today we will try to build a maze. This will be the partial animated result! Note there are small graphical problems with the current implementation but we are interested in the maze algorithm code. Building blocks The cell Firstly let’s define...","categories": ["development"],
+        "tags": ["rust","development","graphics","sdl2"],
+        "url": "/development/2021/03/21/maze.html",
+        "teaser": null
       }]
