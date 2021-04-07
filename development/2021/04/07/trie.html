@@ -1,0 +1,475 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Let’s code it: Fast dictionary search - Let’s code it!</title>
+<meta name="description" content="Sometimes we are in the position in which we want to search quickly if a word is inside a set, or in this case a dictionary, of defined words. Tries could be the easy and fast way to achieve this.">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Let's code it!">
+<meta property="og:title" content="Let’s code it: Fast dictionary search">
+<meta property="og:url" content="http://d-cap.github.io/development/2021/04/07/trie.html">
+
+
+  <meta property="og:description" content="Sometimes we are in the position in which we want to search quickly if a word is inside a set, or in this case a dictionary, of defined words. Tries could be the easy and fast way to achieve this.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-04-07T08:00:00+01:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://d-cap.github.io/development/2021/04/07/trie.html">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://d-cap.github.io/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Let's code it! Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <script data-ad-client="ca-pub-5955143626599578" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MJYLQ7BX8P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MJYLQ7BX8P');
+</script>
+
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Let's code it!
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Let’s code it: Fast dictionary search">
+    <meta itemprop="description" content="Sometimes we are in the position in which we want to search quickly if a word is inside a set, or in this case a dictionary, of defined words. Tries could be the easy and fast way to achieve this.">
+    <meta itemprop="datePublished" content="2021-04-07T08:00:00+01:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Let’s code it: Fast dictionary search
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Sometimes we are in the position in which we want to search quickly if a word is inside a set, or in this case a dictionary, of defined words. Tries could be the easy and fast way to achieve this.</p>
+
+<p>What is a trie? A trie is a efficient data structure, basically a tree, where every key is split into characters and placed inside the tree in a specific way. Here an example, let say that our dictionary is composed by these words:</p>
+<ul>
+  <li>at</li>
+  <li>test</li>
+  <li>the</li>
+</ul>
+
+<p>The trie constructed with them is:</p>
+
+<p><img src="/assets/images/trie.png" alt="Trie" /></p>
+
+<p>So for each character we create a node and connect that with the next character, and at the end place a <em>“ending node”</em>. If the character is already present we create just a link with the next character or just descend the next node if already present. The <code class="language-plaintext highlighter-rouge">End</code> node is needed to understand if a word is present or not; without we could say that the word <strong>test</strong> is inside the trie when in reality we only put the word <strong>tests</strong>.</p>
+
+<h2 id="building-blocks">Building blocks</h2>
+<h3 id="the-struct">The struct</h3>
+<p>The definition of the trie is the following:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">enum</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="k">where</span>
+    <span class="n">T</span><span class="p">:</span> <span class="n">Display</span><span class="p">,</span>
+<span class="p">{</span>
+    <span class="nf">Value</span><span class="p">(</span><span class="n">T</span><span class="p">),</span>
+    <span class="n">End</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">pub</span> <span class="k">struct</span> <span class="n">Trie</span> <span class="p">{</span>
+    <span class="n">root</span><span class="p">:</span> <span class="n">ArenaTree</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&lt;</span><span class="nb">u8</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+    <span class="n">min</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+    <span class="n">max</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">Trie</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">root</span> <span class="o">=</span> <span class="nn">ArenaTree</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+        <span class="c">// Adds the first node for the root, this will not be considered in the search</span>
+        <span class="n">root</span><span class="nf">.add_child</span><span class="p">(</span><span class="nb">None</span><span class="p">,</span> <span class="nn">Node</span><span class="p">::</span><span class="nf">Value</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="n">Self</span> <span class="p">{</span>
+            <span class="n">root</span><span class="p">,</span>
+            <span class="c">// Min needs to be the maximum value we can have</span>
+            <span class="n">min</span><span class="p">:</span> <span class="nn">usize</span><span class="p">::</span><span class="n">MAX</span><span class="p">,</span>
+            <span class="c">// Max needs to be the minimum value we can have</span>
+            <span class="n">max</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>A <code class="language-plaintext highlighter-rouge">Node</code> is just an enum that represent a node inside the trie. We have only two values:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Value</code> that contains the single byte;</li>
+  <li><code class="language-plaintext highlighter-rouge">End</code> that represent the end of a sequence of bytes, this is to mark the end of a word inside the trie.</li>
+</ul>
+
+<p>The trie <code class="language-plaintext highlighter-rouge">struct</code> is using an <a href="/development/2021/03/03/arena-tree.html">ArenaTree</a> to make it as compact as possible in memory. The other two values (min and max) are used to optimise the search process, checking if the input value could be inside the trie, a smaller or bigger key, lengthwise, it’s not possible to be inside the trie.</p>
+
+<blockquote>
+  <p>Note in our case we use bytes to handle utf-8 characters in an easier way</p>
+</blockquote>
+
+<h3 id="add-a-key">Add a key</h3>
+<p>Adding each byte of the key is easy:</p>
+<ol>
+  <li>Navigate the tree;</li>
+  <li>If the <code class="language-plaintext highlighter-rouge">Value</code> is not present create it otherwise move to the next;</li>
+  <li>After all the bytes are added to the trie add the <code class="language-plaintext highlighter-rouge">End</code> node as a child of the last byte.</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">add_key</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="o">&amp;</span><span class="p">[</span><span class="nb">u8</span><span class="p">])</span> <span class="p">{</span>
+    <span class="c">// Checks if the length of the new key is smaller then the one already saved</span>
+    <span class="k">if</span> <span class="k">self</span><span class="py">.min</span> <span class="o">&gt;</span> <span class="n">key</span><span class="nf">.len</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.min</span> <span class="o">=</span> <span class="n">key</span><span class="nf">.len</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="c">// Checks if the length of the new key is bigger then the one already saved</span>
+    <span class="k">if</span> <span class="k">self</span><span class="py">.max</span> <span class="o">&lt;</span> <span class="n">key</span><span class="nf">.len</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.max</span> <span class="o">=</span> <span class="n">key</span><span class="nf">.len</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="c">// Starts with the root node, this has been forced in the construction process</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">node</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c">// For each byte inside the key</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="n">in</span> <span class="n">key</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">found</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="c">// Starts with the first child in the children list</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">child</span> <span class="o">=</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="py">.first_child</span><span class="p">;</span>
+        <span class="c">// Until there is a child</span>
+        <span class="k">while</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="n">child</span> <span class="p">{</span>
+            <span class="c">// Checks if the node is a Value node</span>
+            <span class="k">match</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="py">.data</span> <span class="p">{</span>
+                <span class="nn">Node</span><span class="p">::</span><span class="nf">Value</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="c">// If the byte is the same that the one inside the Value node</span>
+                    <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="o">*</span><span class="n">b</span> <span class="p">{</span>
+                        <span class="c">// Move the node to the found child</span>
+                        <span class="n">node</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+                        <span class="c">// Stop the loop a node for the current byte has been found</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="mi">_</span> <span class="k">=&gt;</span> <span class="p">{}</span>
+            <span class="p">}</span>
+            <span class="c">// Moves to the next child</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="py">.next_node</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c">// If the node has not been found a new node needs to be created as a child of the previous found node</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">found</span> <span class="p">{</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="k">self</span><span class="py">.root</span><span class="nf">.add_child</span><span class="p">(</span><span class="nf">Some</span><span class="p">(</span><span class="n">node</span><span class="p">),</span> <span class="nn">Node</span><span class="p">::</span><span class="nf">Value</span><span class="p">(</span><span class="o">*</span><span class="n">b</span><span class="p">))</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">// Marks the sequence with an End node</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">found</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+    <span class="c">// Starts with the first child in the last node of the sequence</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">child</span> <span class="o">=</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="py">.first_child</span><span class="p">;</span>
+    <span class="c">// Until there is a child</span>
+    <span class="k">while</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="n">child</span> <span class="p">{</span>
+        <span class="c">// Checks if there is an ending node</span>
+        <span class="k">match</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="py">.data</span> <span class="p">{</span>
+            <span class="nn">Node</span><span class="p">::</span><span class="n">End</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+                <span class="c">// Stops the loop for the current child, a End node has been found</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="mi">_</span> <span class="k">=&gt;</span> <span class="p">{}</span>
+        <span class="p">}</span>
+        <span class="c">// Moves to the next child</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="py">.next_node</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c">// If the End node has not been found a new one needs be created as a child of the previous found node</span>
+    <span class="k">if</span> <span class="o">!</span><span class="n">found</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.root</span><span class="nf">.add_child</span><span class="p">(</span><span class="nf">Some</span><span class="p">(</span><span class="n">node</span><span class="p">),</span> <span class="nn">Node</span><span class="p">::</span><span class="n">End</span><span class="p">)</span><span class="nf">.unwrap</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="search-for-a-key">Search for a key</h3>
+<p>Searching for a key is even easier than the previous function:</p>
+<ol>
+  <li>Check if the key is inside the size of the values added in the trie, if not it means that the key is not part of the dictionary;</li>
+  <li>If it is, navigate the tree bytewise;</li>
+  <li>If all the bytes are present as well as the <code class="language-plaintext highlighter-rouge">End</code> node the key has been found.</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">is_key_present</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="o">&amp;</span><span class="p">[</span><span class="nb">u8</span><span class="p">])</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
+    <span class="c">// If the key is outside of the minimum and maximum values contained in the data structure</span>
+    <span class="k">if</span> <span class="n">key</span><span class="nf">.len</span><span class="p">()</span> <span class="o">&lt;</span> <span class="k">self</span><span class="py">.min</span> <span class="p">||</span> <span class="n">key</span><span class="nf">.len</span><span class="p">()</span> <span class="o">&gt;</span> <span class="k">self</span><span class="py">.max</span> <span class="p">{</span>
+        <span class="c">// Returns that is not present</span>
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c">// Starts with the root node, this has been forced in the construction process</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">node</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c">// For each byte inside the key</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="n">in</span> <span class="n">key</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">found</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="c">// Starts with the first child in the children list</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">child</span> <span class="o">=</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="py">.first_child</span><span class="p">;</span>
+        <span class="c">// Checks if the node is a Value node</span>
+        <span class="k">while</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="n">child</span> <span class="p">{</span>
+            <span class="k">match</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="py">.data</span> <span class="p">{</span>
+                <span class="nn">Node</span><span class="p">::</span><span class="nf">Value</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="c">// If the byte is the same that the one inside the Value node</span>
+                    <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="o">*</span><span class="n">b</span> <span class="p">{</span>
+                        <span class="c">// Move the node to the found child</span>
+                        <span class="n">node</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+                        <span class="c">// Stop the loop a node for the current byte has been found</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="mi">_</span> <span class="k">=&gt;</span> <span class="p">{}</span>
+            <span class="p">}</span>
+            <span class="c">// Moves to the next child</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="py">.next_node</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c">// If not found it means that the byte is not present inside the data structure</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">found</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    
+    <span class="c">// Searches for the End node in the sequence</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">found</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+    <span class="c">// Starts with the first child in the last node of the sequence</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">child</span> <span class="o">=</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="py">.first_child</span><span class="p">;</span>
+    <span class="c">// Until there is a child</span>
+    <span class="k">while</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="n">child</span> <span class="p">{</span>
+        <span class="c">// Checks if there is an ending node</span>
+        <span class="k">match</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="py">.data</span> <span class="p">{</span>
+            <span class="nn">Node</span><span class="p">::</span><span class="n">End</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+                <span class="c">// Stops the loop for the current child, a End node has been found</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="mi">_</span> <span class="k">=&gt;</span> <span class="p">{}</span>
+        <span class="p">}</span>
+        <span class="c">// Moves to the next child</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="k">self</span><span class="py">.root</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="py">.next_node</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c">// Returns the status of the flag, this should be true only if all bytes and an End node have been found</span>
+    <span class="n">found</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note the code duplication is left in place on purpose because makes the code faster and is not so much that could affect development time in the future</p>
+</blockquote>
+
+<p>See you next time!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-04-07T08:00:00+01:00">April 7, 2021</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/development/2021/03/21/maze.html" class="pagination--pager" title="Let’s code it: A-Maze-ing
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/d-cap" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="http://linkedin.com/in/davide-capomagi-6a5186a" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="http://omgm.rocks" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-scroll" aria-hidden="true"></i> OMGM</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Let's code it!.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

@@ -28,4 +28,10 @@ var store = [{
         "tags": ["rust","development","graphics","sdl2"],
         "url": "/development/2021/03/21/maze.html",
         "teaser": null
+      },{
+        "title": "Let's code it: Fast dictionary search",
+        "excerpt":"Sometimes we are in the position in which we want to search quickly if a word is inside a set, or in this case a dictionary, of defined words. Tries could be the easy and fast way to achieve this. What is a trie? A trie is a efficient data...","categories": ["development"],
+        "tags": ["rust","development","data structure"],
+        "url": "/development/2021/04/07/trie.html",
+        "teaser": null
       }]

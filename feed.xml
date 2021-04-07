@@ -1,4 +1,214 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="http://d-cap.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="http://d-cap.github.io/" rel="alternate" type="text/html" /><updated>2021-03-25T06:34:44+00:00</updated><id>http://d-cap.github.io/feed.xml</id><title type="html">Let’s code it!</title><subtitle>A blog about software development, data structures and algorithms.</subtitle><entry><title type="html">Let’s code it: A-Maze-ing</title><link href="http://d-cap.github.io/development/2021/03/21/maze.html" rel="alternate" type="text/html" title="Let’s code it: A-Maze-ing" /><published>2021-03-21T07:00:00+00:00</published><updated>2021-03-21T07:00:00+00:00</updated><id>http://d-cap.github.io/development/2021/03/21/maze</id><content type="html" xml:base="http://d-cap.github.io/development/2021/03/21/maze.html">&lt;p&gt;In our work sometimes is nice to experiment and today we will try to build a maze. This will be the partial animated result!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="http://d-cap.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="http://d-cap.github.io/" rel="alternate" type="text/html" /><updated>2021-04-07T16:38:52+01:00</updated><id>http://d-cap.github.io/feed.xml</id><title type="html">Let’s code it!</title><subtitle>A blog about software development, data structures and algorithms.</subtitle><entry><title type="html">Let’s code it: Fast dictionary search</title><link href="http://d-cap.github.io/development/2021/04/07/trie.html" rel="alternate" type="text/html" title="Let’s code it: Fast dictionary search" /><published>2021-04-07T08:00:00+01:00</published><updated>2021-04-07T08:00:00+01:00</updated><id>http://d-cap.github.io/development/2021/04/07/trie</id><content type="html" xml:base="http://d-cap.github.io/development/2021/04/07/trie.html">&lt;p&gt;Sometimes we are in the position in which we want to search quickly if a word is inside a set, or in this case a dictionary, of defined words. Tries could be the easy and fast way to achieve this.&lt;/p&gt;
+
+&lt;p&gt;What is a trie? A trie is a efficient data structure, basically a tree, where every key is split into characters and placed inside the tree in a specific way. Here an example, let say that our dictionary is composed by these words:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;at&lt;/li&gt;
+  &lt;li&gt;test&lt;/li&gt;
+  &lt;li&gt;the&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The trie constructed with them is:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/trie.png&quot; alt=&quot;Trie&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So for each character we create a node and connect that with the next character, and at the end place a &lt;em&gt;“ending node”&lt;/em&gt;. If the character is already present we create just a link with the next character or just descend the next node if already present. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;End&lt;/code&gt; node is needed to understand if a word is present or not; without we could say that the word &lt;strong&gt;test&lt;/strong&gt; is inside the trie when in reality we only put the word &lt;strong&gt;tests&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;building-blocks&quot;&gt;Building blocks&lt;/h2&gt;
+&lt;h3 id=&quot;the-struct&quot;&gt;The struct&lt;/h3&gt;
+&lt;p&gt;The definition of the trie is the following:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;where&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;Value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;End&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Trie&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArenaTree&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;u8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;usize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;usize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;impl&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Trie&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Self&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;ArenaTree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Adds the first node for the root, this will not be considered in the search&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.add_child&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.unwrap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Self&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;// Min needs to be the maximum value we can have&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;usize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MAX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;// Max needs to be the minimum value we can have&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;A &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Node&lt;/code&gt; is just an enum that represent a node inside the trie. We have only two values:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Value&lt;/code&gt; that contains the single byte;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;End&lt;/code&gt; that represent the end of a sequence of bytes, this is to mark the end of a word inside the trie.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The trie &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;struct&lt;/code&gt; is using an &lt;a href=&quot;/development/2021/03/03/arena-tree.html&quot;&gt;ArenaTree&lt;/a&gt; to make it as compact as possible in memory. The other two values (min and max) are used to optimise the search process, checking if the input value could be inside the trie, a smaller or bigger key, lengthwise, it’s not possible to be inside the trie.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note in our case we use bytes to handle utf-8 characters in an easier way&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;add-a-key&quot;&gt;Add a key&lt;/h3&gt;
+&lt;p&gt;Adding each byte of the key is easy:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Navigate the tree;&lt;/li&gt;
+  &lt;li&gt;If the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Value&lt;/code&gt; is not present create it otherwise move to the next;&lt;/li&gt;
+  &lt;li&gt;After all the bytes are added to the trie add the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;End&lt;/code&gt; node as a child of the last byte.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add_key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;u8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// Checks if the length of the new key is smaller then the one already saved&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.min&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.min&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// Checks if the length of the new key is bigger then the one already saved&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// Starts with the root node, this has been forced in the construction process&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// For each byte inside the key&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Starts with the first child in the children list&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.first_child&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Until there is a child&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Some&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;// Checks if the node is a Value node&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.data&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nn&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;c&quot;&gt;// If the byte is the same that the one inside the Value node&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;c&quot;&gt;// Move the node to the found child&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                        &lt;span class=&quot;c&quot;&gt;// Stop the loop a node for the current byte has been found&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;mi&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;// Moves to the next child&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.next_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;c&quot;&gt;// If the node has not been found a new node needs to be created as a child of the previous found node&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.add_child&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Some&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.unwrap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;// Marks the sequence with an End node&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// Starts with the first child in the last node of the sequence&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.first_child&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// Until there is a child&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Some&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Checks if there is an ending node&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.data&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nn&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;End&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;c&quot;&gt;// Stops the loop for the current child, a End node has been found&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;mi&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Moves to the next child&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.next_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;// If the End node has not been found a new one needs be created as a child of the previous found node&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.add_child&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Some&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;End&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.unwrap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;search-for-a-key&quot;&gt;Search for a key&lt;/h3&gt;
+&lt;p&gt;Searching for a key is even easier than the previous function:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Check if the key is inside the size of the values added in the trie, if not it means that the key is not part of the dictionary;&lt;/li&gt;
+  &lt;li&gt;If it is, navigate the tree bytewise;&lt;/li&gt;
+  &lt;li&gt;If all the bytes are present as well as the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;End&lt;/code&gt; node the key has been found.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;is_key_present&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;u8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// If the key is outside of the minimum and maximum values contained in the data structure&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.min&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.max&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Returns that is not present&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// Starts with the root node, this has been forced in the construction process&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// For each byte inside the key&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Starts with the first child in the children list&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.first_child&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Checks if the node is a Value node&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Some&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.data&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nn&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;c&quot;&gt;// If the byte is the same that the one inside the Value node&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;c&quot;&gt;// Move the node to the found child&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                        &lt;span class=&quot;c&quot;&gt;// Stop the loop a node for the current byte has been found&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;mi&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;// Moves to the next child&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.next_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;c&quot;&gt;// If not found it means that the byte is not present inside the data structure&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    
+    &lt;span class=&quot;c&quot;&gt;// Searches for the End node in the sequence&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// Starts with the first child in the last node of the sequence&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.first_child&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// Until there is a child&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Some&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Checks if there is an ending node&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.data&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nn&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;End&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;c&quot;&gt;// Stops the loop for the current child, a End node has been found&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;mi&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;// Moves to the next child&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;child&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.next_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;// Returns the status of the flag, this should be true only if all bytes and an End node have been found&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note the code duplication is left in place on purpose because makes the code faster and is not so much that could affect development time in the future&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;See you next time!&lt;/p&gt;</content><author><name></name></author><category term="development" /><category term="rust" /><category term="development" /><category term="data structure" /><summary type="html">Sometimes we are in the position in which we want to search quickly if a word is inside a set, or in this case a dictionary, of defined words. Tries could be the easy and fast way to achieve this.</summary></entry><entry><title type="html">Let’s code it: A-Maze-ing</title><link href="http://d-cap.github.io/development/2021/03/21/maze.html" rel="alternate" type="text/html" title="Let’s code it: A-Maze-ing" /><published>2021-03-21T07:00:00+00:00</published><updated>2021-03-21T07:00:00+00:00</updated><id>http://d-cap.github.io/development/2021/03/21/maze</id><content type="html" xml:base="http://d-cap.github.io/development/2021/03/21/maze.html">&lt;p&gt;In our work sometimes is nice to experiment and today we will try to build a maze. This will be the partial animated result!&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/images/maze.jpg&quot; alt=&quot;Maze&quot; /&gt;&lt;/p&gt;
 &lt;blockquote&gt;
